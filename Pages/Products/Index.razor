@@ -1,0 +1,43 @@
+@page "/products"
+@using Microsoft.EntityFrameworkCore
+@inject AppDbContext _context
+
+<PageTitle>Products</PageTitle>
+
+<h1>Products</h1>
+<a href="products/create" class="btn btn-primary">NOVO</a>
+
+<table class="table">
+    <thead>
+    <tr>
+        <td>#</td>
+        <td>Title</td>
+        <td>Price</td>
+        <td></td>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var product in _products)
+    {
+        <tr>
+            <td>@product.Id</td>
+            <td>@product.Title</td>
+            <td>@product.Price.ToString("C")</td>
+            <td>
+                <a href="/products/edit/@product.Id">Edit</a>
+                <a href="/products/delete/@product.Id">Delete</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+
+@code{
+
+    List<Product> _products = new();
+    protected override async Task OnInitializedAsync()
+    {
+        _products = await _context.Products.AsNoTracking().ToListAsync();
+    }
+
+}
